@@ -14,6 +14,4 @@ export const reset = async (values: z.infer<typeof resetSchema>) => {
   const { email } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
-  
-  if
 };
