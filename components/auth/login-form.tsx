@@ -18,6 +18,8 @@ import { Button } from "../ui/button";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { login } from "@/actions/login";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type LoginFormProps = {};
 
@@ -25,6 +27,12 @@ export const LoginForm = ({}: LoginFormProps) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider"
+      : "";
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -40,8 +48,8 @@ export const LoginForm = ({}: LoginFormProps) => {
 
     startTransition(() => {
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        setSuccess(data?.success);
       });
     });
   };
@@ -88,12 +96,20 @@ export const LoginForm = ({}: LoginFormProps) => {
                       placeholder="*******"
                     />
                   </FormControl>
+                  <Button
+                    size={"sm"}
+                    asChild
+                    variant={"link"}
+                    className="px-0 font-normal"
+                  >
+                    <Link href={"/auth/reset"}>Forgot Passord?</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button disabled={isPending} type="submit" className="w-full">
             Login
