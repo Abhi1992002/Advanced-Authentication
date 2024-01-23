@@ -7,11 +7,13 @@ import { JWT } from "@auth/core/jwt";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "./lib/db";
 import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation";
+import { getAccountByUserId } from "./data/account";
 export const {
   handlers: { GET, POST },
   auth,
   signIn,
   signOut,
+  unstable_update: update,
 } = NextAuth({
   pages: {
     signIn: "/auth/login", // page for sigin
@@ -65,17 +67,36 @@ export const {
         session.user.role = token?.role;
       }
 
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token?.isTwoFactorEnabled as boolean;
+      }
+
+      if (session.user) {
+        session.user.name = token?.name;
+        session.user.email = token?.email;
+        session.user.isOAuth = token?.isOAuth as boolean;
+      }
+
       return session;
     },
 
-    async jwt({ token }: any) {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
       const user = await getUserById(token.sub);
       console.log(user?.role);
       if (!user) return token;
 
+      const account = await getAccountByUserId(user.id);
+
+      // we are syncing token with db properties because as we change the db stuffs , it will also going to change, as we change database, out token and session also changes
+      token.isOAuth = !!account;
+      token.name = user.name;
+      token.email = user.email;
       token.role = user?.role;
+      token.isTwoFactorEnabled = user.isTwoFactorEnabled;
+
+      console.log("token");
 
       return token;
     },
