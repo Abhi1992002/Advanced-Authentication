@@ -12,6 +12,38 @@
 
 <img width="1106" alt="Screenshot 2024-02-21 at 1 31 03 PM" src="https://github.com/Abhi1992002/Advanced-Authentication/assets/122007096/0c40073c-965d-416f-bb55-1efe06c7696d">
 
+## How to use 
+
+Clone repositry in your local machine
+```cli
+git clone https://github.com/Abhi1992002/Advanced-Authentication
+```
+create .env file
+```
+cp .env.example .env
+```
+or
+Use cli to create initialial app
+```
+npx create @abhimanyu1992002/cli@latest
+```
+create Prisma Client
+```
+npx prisma generate
+```
+Push migrations to your database, everytime you change schema use this. It helps to create migration as well as prisma client
+```
+npx prisma db push
+```
+start code in development environment
+```
+npm run dev
+```
+built command
+```
+npm run built
+```
+
 ## Features
 
 - 🔐 Next-auth v5 (Auth.js)
