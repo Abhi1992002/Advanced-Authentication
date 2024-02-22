@@ -25,7 +25,7 @@ cp .env.example .env
 or
 Use cli to create initialial app
 ```
-npx create @abhimanyu1992002/cli@latest
+npx @abhimanyu1992002/cli@latest
 ```
 create Prisma Client
 ```
