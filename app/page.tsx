@@ -65,7 +65,7 @@ export default function Home() {
           variant={"outline"}
           className="bg-black w-[90%] md:w-fit text-white"
         >
-          <Link href={"https://cli.abhimanyu.tech"}>
+          <Link href={"https://github.com/Abhi1992002/cli"}>
             Start your Project with our cli
           </Link>
         </Button>
